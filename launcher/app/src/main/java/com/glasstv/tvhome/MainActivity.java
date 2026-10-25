@@ -116,7 +116,16 @@ public class MainActivity extends Activity implements AppAdapter.TileListener, T
     private long idleClockMs;
     /** 时间屏保默认闲置分钟数（config.xml 没配 home_idle_clock_minutes 时用）。 */
     private static final int DEFAULT_IDLE_CLOCK_MINUTES = 5;
-    private final Runnable showIdleClock = () -> startActivity(new Intent(this, ClockActivity.class));
+    /**
+     * 2026-10-25 K：进屏保前再确认一次 Home 真的在前台。计时器挂在 root 上，onPause 里虽然会
+     * removeCallbacks，但已经排队的回调、或以后有人漏了取消，都会让 ClockActivity 盖在正在
+     * 播放的视频上。多这层判断没有代价。
+     */
+    private boolean resumed;
+    private final Runnable showIdleClock = () -> {
+        if (!resumed || !hasWindowFocus() || isFinishing()) return;
+        startActivity(new Intent(this, ClockActivity.class));
+    };
     private String liveTvAction;
     private String inputAction;
     private String sourcePanelService;
@@ -756,6 +765,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener, T
     @Override
     protected void onResume() {
         super.onResume();
+        resumed = true;
         if (!BuildConfig.LITE) Weather.refreshIfStale(); // 天气一小时一取，回到前台顺手看一眼
         // A festival that started or ended while Home was in the background: rebuild with or without it.
         if (festive != festival.active(LocalDate.now())) {
@@ -914,6 +924,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener, T
     @Override
     protected void onPause() {
         super.onPause();
+        resumed = false;
         root.removeCallbacks(showIdleClock);
         endReorder();   // Home or another app while reordering keeps the order so far
         wallpaperPlayer.stop();
@@ -935,6 +946,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener, T
     protected void onStop() {
         super.onStop();
         started = false;
+        root.removeCallbacks(showIdleClock);   // 2026-10-25 K：再兜一层，Home 不在屏幕上就不留屏保计时
         unregisterReceiver(packageReceiver);
         unregisterReceiver(timeReceiver);
         try { unregisterReceiver(usbReceiver); } catch (Exception ignored) {}
