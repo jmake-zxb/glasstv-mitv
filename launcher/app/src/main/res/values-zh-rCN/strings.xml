@@ -122,6 +122,6 @@
     <string name="about_title">关于桌面</string>
     <string name="about_project">GlassTV</string>
     <string name="about_forked">K 定制维护</string>
-    <string name="about_repo">github.com/jichun29/glasstv</string>
+    <string name="about_repo">github.com/jmake-zxb/glasstv-mitv</string>
     <string name="about_version">版本 %1$s</string>
 </resources>

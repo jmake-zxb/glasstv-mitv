@@ -6,9 +6,9 @@ reach people's living rooms. Please report anything you find privately, not in a
 ## How to report
 
 Use GitHub's private vulnerability reporting: open the
-[Security tab](https://github.com/Gathin23/cleanyourtv/security) and choose **Report a vulnerability**.
-Only the maintainer sees the report. If that doesn't work for you, email
-[hello@itsgathin.com](mailto:hello@itsgathin.com) with "Security" in the subject.
+[Security tab](https://github.com/jmake-zxb/glasstv-mitv/security) and choose **Report a vulnerability**.
+Only the maintainer sees the report. If that page is not enabled for this fork, open an issue in the
+same repository and say you'd like to report something privately.
 
 Please include what is affected (the prompt, a tool in `tools/`, the launcher, a debloat list),
 the steps to reproduce it, and what an attacker could do with it.

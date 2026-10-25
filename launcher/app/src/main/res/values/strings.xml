@@ -186,7 +186,7 @@
     <string name="about_title">About GlassTV</string>
     <string name="about_project">GlassTV</string>
     <string name="about_forked">Forked &amp; maintained by K</string>
-    <string name="about_repo">github.com/jichun29/glasstv</string>
+    <string name="about_repo">github.com/jmake-zxb/glasstv-mitv</string>
     <string name="about_version">Version %1$s</string>
     <!-- 检查更新（K 2026-10-22） -->
     <string name="menu_check_update">检查更新</string>

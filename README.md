@@ -17,9 +17,10 @@
 >
 > 小米国行电视实测可用（MiTV-ASTP0 / Android 9），理论上所有 Android TV 4.4+ 都能跑。
 
-- 官网：**https://tv.jichun29.cn**（静态站，源码在 [glasstv-site](https://github.com/jichun29/glasstv-site)，本仓库 `site/` 是同一份）
-- 源码：https://github.com/jichun29/glasstv
-- 下载：见 [Releases](https://github.com/jichun29/glasstv/releases)
+- 源码：https://github.com/jmake-zxb/glasstv-mitv
+- 下载：见本仓库 [Releases](https://github.com/jmake-zxb/glasstv-mitv/releases)
+- 上游：https://github.com/jichun29/glasstv（本仓库基于其 v4.0.0，MIT）
+- 上游官网：https://tv.jichun29.cn（上游维护，本 fork 不托管站点）
 
 ## 让 AI 帮你装（最省事）
 
@@ -27,7 +28,7 @@
 
 ```text
 请帮我把开源电视桌面 GlassTV 装到我的电视上，并设为开机进入的桌面。
-项目地址：https://github.com/jichun29/glasstv
+项目地址：https://github.com/jmake-zxb/glasstv-mitv
 请先完整读完仓库里的 PROMPT.md（安装说明）再动手：tools/ 和 launcher/ 直接复用，不用从头写。
 我的电视型号是：____（填你的型号）
 
@@ -127,7 +128,7 @@ adb shell settings put secure accessibility_enabled 1
 
 ## 下载
 
-到 [Releases](https://github.com/jichun29/glasstv/releases/latest) 下载，**按设备选一个**：
+到 [Releases](https://github.com/jmake-zxb/glasstv-mitv/releases/latest) 下载，**按设备选一个**：
 
 | 安装包 | 支持系统 | 说明 |
 |---|---|---|

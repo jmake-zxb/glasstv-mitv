@@ -1,4 +1,5 @@
-> **注：本项目自 4.0.0 起更名为 GlassTV（玻璃桌面），仓库地址 github.com/jichun29/glasstv。**
+> **注：本项目自 4.0.0 起更名为 GlassTV（玻璃桌面），本仓库地址 github.com/jmake-zxb/glasstv-mitv；
+> 上游为 github.com/jichun29/glasstv。**
 > 本文档描述的是清理工具（去广告）的使用方法，工具本身仍沿用上游名称与包名。
 
 <p align="center">
@@ -10,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://cleanyour.tv">项目网站</a> ·
+  <a href="https://github.com/jmake-zxb/glasstv-mitv">项目仓库</a> ·
   <a href="PROMPT.md">操作提示词</a> ·
   <a href="examples/README.md">机型清单</a> ·
   <a href="SHOWCASE.md">社区作品</a>
@@ -274,7 +275,7 @@ TV_HOST=192.168.1.50 tools/restore.sh "examples/你的机型/debloat.txt" com.go
 
 ## 联系与安全报告
 
-电视使用问题可在 [GitHub Discussions](https://github.com/Gathin23/cleanyourtv/discussions) 讨论。媒体与合作联系方式见[英文联系说明](README.md#contact)。安全漏洞请通过仓库 [Security 页面](https://github.com/Gathin23/cleanyourtv/security) 私下报告，详见 [`SECURITY.md`](SECURITY.md)。
+电视使用问题可在本仓库 [Issues](https://github.com/jmake-zxb/glasstv-mitv/issues) 讨论。安全漏洞请通过本仓库 [Security 页面](https://github.com/jmake-zxb/glasstv-mitv/security) 私下报告，详见 [`SECURITY.md`](SECURITY.md)。
 
 ## 许可证
 

@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 检查更新（K 2026-10-22 需求）。
  *
- * 数据源 = 我们自己的 GitHub 仓库 jichun29/glasstv 的 Releases API。
+ * 数据源 = 我们自己的 GitHub 仓库 jmake-zxb/glasstv-mitv 的 Releases API。
  * - 手动：设置里「检查更新」按一下立刻查。
  * - 自动：默认关闭，开了以后每 3 小时查一次（参考上游 aerial-tv v1.26 的频率）。
  *
@@ -28,7 +28,7 @@ import java.util.List;
  */
 public final class UpdateChecker {
     private static final String TAG = "UpdateChecker";
-    private static final String REPO = "jichun29/glasstv";
+    private static final String REPO = "jmake-zxb/glasstv-mitv";
     private static final String API = "https://api.github.com/repos/" + REPO + "/releases/latest";
     private static final long AUTO_INTERVAL_MS = 3 * 60 * 60 * 1000L; // 3 小时
     private static final String PREF = "update_checker";
@@ -167,19 +167,30 @@ public final class UpdateChecker {
                 "https://gh-proxy.com/" + API,
         };
         String body = null;
+        int lastCode = 0;
         for (String src : sources) {
-            body = httpGet(src);
-            if (body != null) break;
+            HttpResp r = httpGetResp(src);
+            if (r == null) continue;          // 连不上（超时 / DNS / 重置）
+            lastCode = r.code;
+            if (r.code == 200) { body = r.body; break; }
         }
         ctx.getSharedPreferences(PREF, Context.MODE_PRIVATE).edit()
                 .putLong(KEY_LAST_CHECK, System.currentTimeMillis()).apply();
 
         if (body == null) {
-            return new Result(false, current, null, null, null, null, "网络不可用，所有源都连不上");
+            // 2026-10-25 K：私有仓库 / 还没发 Release 时 GitHub 返回 404，别报成「网络不可用」。
+            String error = (lastCode == 401 || lastCode == 403 || lastCode == 404)
+                    ? "更新仓库还没有发布版本（或仓库未公开）"
+                    : "网络不可用，所有源都连不上";
+            return new Result(false, current, null, null, null, null, error);
         }
         try {
             JSONObject j = new JSONObject(body);
             String tag = j.optString("tag_name", "");
+            if (tag.isEmpty()) {
+                // 镜像把 GitHub 的 404 包成 200 时也会走到这里。
+                return new Result(false, current, null, null, null, null, "更新仓库还没有发布版本（或仓库未公开）");
+            }
             String name = j.optString("name", tag);
             String notes = j.optString("body", "");
             String apkUrl = null;
@@ -228,20 +239,33 @@ public final class UpdateChecker {
     }
 
     private static String httpGet(String url) {
+        HttpResp r = httpGetResp(url);
+        return r == null || r.code != 200 ? null : r.body;
+    }
+
+    /** HTTP 结果：状态码 + 正文。区分「没有 Release」(404) 和「连不上」(null)。 */
+    private static final class HttpResp {
+        final int code;
+        final String body;
+        HttpResp(int code, String body) { this.code = code; this.body = body; }
+    }
+
+    private static HttpResp httpGetResp(String url) {
         HttpURLConnection c = null;
         try {
             c = (HttpURLConnection) new URL(url).openConnection();
             c.setConnectTimeout(8000);
             c.setReadTimeout(8000);
             c.setRequestProperty("User-Agent", "GlassTV-Launcher");
-            if (c.getResponseCode() != 200) return null;
+            int code = c.getResponseCode();
+            if (code != 200) return new HttpResp(code, null);
             InputStream in = c.getInputStream();
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buf = new byte[8192];
             int n;
             while ((n = in.read(buf)) != -1) out.write(buf, 0, n);
             in.close();
-            return out.toString("UTF-8");
+            return new HttpResp(200, out.toString("UTF-8"));
         } catch (Exception e) {
             Log.w(TAG, "httpGet " + url + ": " + e.getMessage());
             return null;

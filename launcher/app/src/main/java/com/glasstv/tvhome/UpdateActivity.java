@@ -59,7 +59,7 @@ public final class UpdateActivity extends Activity {
         UpdateChecker.checkNow(this, r -> {
             progress.setVisibility(View.GONE);
             if (r.error != null) {
-                statusText.setText("检查失败");
+                statusText.setText(r.error);
                 statusText.setTextColor(0xFFFF6B6B);
                 versionText.setText("v" + r.currentVersion);
                 showCurrentVersionLog(r.currentVersion);
