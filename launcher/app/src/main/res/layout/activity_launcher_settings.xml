@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 桌面设置（2026-10-23 K）：壁纸 / 屏保 / 内存清理 已拆成三个独立页，这里只留入口。 -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF101419"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="88dp"
+        android:paddingEnd="88dp"
+        android:paddingTop="40dp"
+        android:paddingBottom="48dp">
+
+        <!-- ===== 页面标题 ===== -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="桌面设置"
+            android:textColor="#FFFFFFFF"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <!-- ========== 组 1：桌面布局 ========== -->
+        <TextView
+            style="@style/SettingsGroupTitle"
+            android:layout_marginTop="32dp"
+            android:text="布局" />
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:layout_marginTop="12dp"
+            android:focusable="false"
+            android:clickable="false">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="@string/columns_label" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:id="@+id/columns4" style="@style/SettingsSegment" android:text="4" />
+                <TextView android:id="@+id/columns5" style="@style/SettingsSegment"
+                    android:layout_marginStart="8dp" android:text="5" />
+                <TextView android:id="@+id/columns6" style="@style/SettingsSegment"
+                    android:layout_marginStart="8dp" android:text="6" />
+                <TextView android:id="@+id/columns7" style="@style/SettingsSegment"
+                    android:layout_marginStart="8dp" android:text="7" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:layout_marginTop="10dp"
+            android:focusable="false"
+            android:clickable="false">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="@string/rows_below_dock_label" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:id="@+id/rows0" style="@style/SettingsSegment" android:text="0" />
+                <TextView android:id="@+id/rows1" style="@style/SettingsSegment"
+                    android:layout_marginStart="8dp" android:text="1" />
+                <TextView android:id="@+id/rows2" style="@style/SettingsSegment"
+                    android:layout_marginStart="8dp" android:text="2" />
+                <TextView android:id="@+id/rows3" style="@style/SettingsSegment"
+                    android:layout_marginStart="8dp" android:text="3" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ========== 组 2：外观（壁纸 / 屏保，各自独立页） ========== -->
+        <TextView
+            style="@style/SettingsGroupTitle"
+            android:layout_marginTop="32dp"
+            android:text="外观" />
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/wallpaperEntry"
+            android:layout_marginTop="12dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="壁纸" />
+            <TextView android:id="@+id/wallpaperEntryValue" style="@style/SettingsRowValue"
+                android:text="@string/wallpaper_theme_default" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="›"
+                android:textColor="#66FFFFFF"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/screensaverEntry"
+            android:layout_marginTop="10dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="屏保" />
+            <TextView android:id="@+id/screensaverEntryValue" style="@style/SettingsRowValue"
+                android:text="时间 · 开" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="›"
+                android:textColor="#66FFFFFF"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <!-- ========== 组 2.5：时间与天气（2026-10-25 合并二开版） ========== -->
+        <TextView
+            style="@style/SettingsGroupTitle"
+            android:layout_marginTop="32dp"
+            android:text="时间与天气" />
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:layout_marginTop="12dp"
+            android:focusable="false"
+            android:clickable="false">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="时间与天气字号" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:id="@+id/headerSize0"
+                    style="@style/SettingsSegment"
+                    android:layout_width="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="标准" />
+                <TextView android:id="@+id/headerSize1"
+                    style="@style/SettingsSegment"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="大" />
+                <TextView android:id="@+id/headerSize2"
+                    style="@style/SettingsSegment"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="特大" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 天气城市：点开弹输入框，空 = 自动定位 -->
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/weatherCityChoice"
+            android:layout_marginTop="10dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="天气城市" />
+            <TextView android:id="@+id/weatherCityValue"
+                style="@style/SettingsRowValue"
+                android:text="自动定位" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="›"
+                android:textColor="#66FFFFFF"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <!-- 背景颜色：壁纸关掉/缺图时才看得见，四色与主题默认一致 -->
+        <LinearLayout style="@style/SettingsRowV2"
+            android:layout_marginTop="10dp"
+            android:focusable="false"
+            android:clickable="false">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="背景颜色" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:id="@+id/bgColor0"
+                    style="@style/SettingsSegment"
+                    android:layout_width="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="纯黑" />
+                <TextView android:id="@+id/bgColor1"
+                    style="@style/SettingsSegment"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="午夜蓝" />
+                <TextView android:id="@+id/bgColor2"
+                    style="@style/SettingsSegment"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="酒红" />
+                <TextView android:id="@+id/bgColor3"
+                    style="@style/SettingsSegment"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="石板灰" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ========== 组 3：动效 ========== -->
+        <TextView
+            style="@style/SettingsGroupTitle"
+            android:layout_marginTop="32dp"
+            android:text="动效" />
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/animationsChoice"
+            android:layout_marginTop="12dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="@string/settings_animations" />
+            <TextView android:id="@+id/animationsValue" style="@style/SettingsRowValue"
+                android:text="@string/on" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/motionChoice"
+            android:layout_marginTop="10dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="@string/settings_motion" />
+            <TextView android:id="@+id/motionValue" style="@style/SettingsRowValue"
+                android:text="@string/off" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/advancedChoice"
+            android:layout_marginTop="10dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="@string/settings_advanced" />
+            <TextView android:id="@+id/advancedValue" style="@style/SettingsRowValue"
+                android:text="@string/off" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/advancedOffHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:paddingStart="20dp"
+            android:text="@string/settings_advanced_off_hint"
+            android:textColor="#66FFFFFF"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/followThemeChoice"
+            android:layout_marginTop="10dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="@string/settings_follow_theme" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="›"
+                android:textColor="#66FFFFFF"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <!-- ========== 组 4：软件更新 ========== -->
+        <TextView
+            style="@style/SettingsGroupTitle"
+            android:layout_marginTop="32dp"
+            android:text="@string/settings_group_update" />
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:layout_marginTop="12dp"
+            android:focusable="false"
+            android:clickable="false">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="@string/software_update" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:id="@+id/updateManual"
+                    style="@style/SettingsSegment"
+                    android:layout_width="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/software_update_manual" />
+                <TextView android:id="@+id/updateAuto"
+                    style="@style/SettingsSegment"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/software_update_auto" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/checkUpdateChoice"
+            android:layout_marginTop="10dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="@string/settings_check_update" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="›"
+                android:textColor="#66FFFFFF"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <!-- ========== 组 5：存储与清理（内存清理独立页 + 快传） ========== -->
+        <TextView
+            style="@style/SettingsGroupTitle"
+            android:layout_marginTop="32dp"
+            android:text="存储与清理" />
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/memoryEntry"
+            android:layout_marginTop="12dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="内存清理" />
+            <TextView android:id="@+id/memoryEntryValue" style="@style/SettingsRowValue"
+                android:text="@string/off" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="›"
+                android:textColor="#66FFFFFF"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/quickTransferChoice"
+            android:layout_marginTop="10dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="快传（手机推 APK 到电视）" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="›"
+                android:textColor="#66FFFFFF"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <!-- ========== 组 6：系统 ========== -->
+        <TextView
+            style="@style/SettingsGroupTitle"
+            android:layout_marginTop="32dp"
+            android:text="@string/settings_group_system" />
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/defaultHomeChoice"
+            android:layout_marginTop="12dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="@string/settings_home" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="›"
+                android:textColor="#66FFFFFF"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsRowV2"
+            android:id="@+id/tvSettingsChoice"
+            android:layout_marginTop="10dp">
+            <TextView style="@style/SettingsRowLabel"
+                android:text="@string/settings_tv_settings" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="›"
+                android:textColor="#66FFFFFF"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

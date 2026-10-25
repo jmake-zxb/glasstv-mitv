@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <FrameLayout
+        android:id="@+id/card"
+        android:layout_width="180dp"
+        android:layout_height="101dp"
+        android:layout_gravity="center_horizontal|top"
+        android:background="@drawable/tile_bg"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:focusable="true"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null" />
+
+        <!-- 72dp icon-first tile: the icon is the tile, there is no wide poster card around it.
+             The focus ring is applied to this view in AppAdapter (uniform_app_icons). -->
+        <!-- 2026-10-25 K：焦点框独立成浮层，放在图标下面：白色雾面只从图标四周露出来，
+             不会把图标本身洗白，也不依赖 ImageView 背景的 activated 状态（实测 9.0 上不生效）。 -->
+        <View
+            android:id="@+id/iconRing"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:layout_gravity="center"
+            android:background="@drawable/app_icon_ring"
+            android:clickable="false"
+            android:focusable="false"
+            android:importantForAccessibility="no"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            android:contentDescription="@null" />
+
+        <!-- 图标磁贴底部的名字：直接压在背景上，只留文字阴影，不再套黑色渐变条。
+             名字独占底部一行，不再浮在图标中间。 -->
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:shadowColor="#CC000000"
+            android:shadowDx="0"
+            android:shadowDy="2"
+            android:shadowRadius="6"
+            android:textColor="#FFFFFFFF"
+            android:textSize="14sp"
+            android:fontFamily="@font/outfit_medium"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="180dp"
+        android:layout_height="22dp"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="108dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:alpha="0"
+        android:translationY="-6dp"
+        android:textColor="#F2FFFFFF"
+        android:textSize="14sp"
+        android:fontFamily="@font/outfit_medium"
+        android:letterSpacing="0.02" />
+</FrameLayout>

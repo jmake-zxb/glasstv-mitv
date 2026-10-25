@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 控制中心图标磁贴（K 2026-10-22 v2）：澎湃 OS 柔光玻璃质感。
+     默认：竖向渐变半透明白（上亮下暗，模拟玻璃受光面）+ 1dp 顶部高光边 + 大圆角。
+     焦点：实心白（iOS/澎湃 的选中态），圆圈外再加一点柔光。 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFFFF" />
+            <stroke android:width="1dp" android:color="#CCFFFFFF" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#22FFFFFF" />
+            <stroke android:width="1dp" android:color="#2EFFFFFF" />
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- Needed since Android 10 to read the Wi-Fi network name for the network pill. Never requested at
+         runtime: build-and-install grants it with pm grant, so lint's Android 12 "ask for COARSE with
+         FINE" rule does not apply here. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:ignore="CoarseFineLocation" />
+    <!-- K 定制: 直接卸载应用, 不跳第三方管理页 -->
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <!-- 开机自启：开机后桌面守护确认前台是谁（2026-10-23 移植自 aerial-tv） -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 一键 OTA：应用内下载 APK 后交给系统安装器 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- 自动清理内存（杀后台进程）需要；2026-10-23 快传+自动清理 -->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <!-- 桌面守护复活：被固件 force-stop 后把无障碍条目写回去。安装时用 pm grant 授予。 -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- Android 11+ package visibility: lets the launcher list the TV apps it shows as tiles, and the
+         apps that declare a module card (docs/specs/card.md). -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="com.glasstv.tvhome.category.DOCK_CARD" />
+        </intent>
+        <!-- China-market MIUI TV firmware: the Settings and Wi-Fi pills fall back to Xiaomi's settings app. -->
+        <package android:name="com.xiaomi.mitv.settings" />
+    </queries>
+
+    <!-- 2026-10-25 K：MIUI TV 的 STR 待机按“进程名”强杀（canBeKilledBySTR），
+         进程名含冒号的直接放行。桌面整个跑在 :home 里，待机不再被杀，
+         唤醒后仍留在 GlassTV，不需要额外的守护 App。 -->
+    <application
+        android:process=":home"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:banner="@drawable/banner"
+        android:theme="@style/Theme.TvHome"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:allowBackup="false"
+        android:localeConfig="@xml/locales_config">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:excludeFromRecents="true"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|uiMode"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <!-- Listed in the TV's own app list, so it can be opened from the stock home screen too. -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".LauncherSettingsActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:screenOrientation="landscape" />
+        <!-- Remote Settings button panel (settings_key_panel); own task so the app behind stays put. -->
+        <activity
+            android:name=".QuickSettingsActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:launchMode="singleTop"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".HomeSettingsActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoDisplay" />
+        <!-- Home button for remotes that send KEYCODE_ALL_APPS (Xiaomi). Opt-in: HOME_KEY_SERVICE=1
+             build-and-install.sh; see HomeKeyService. -->
+        <service
+            android:name=".HomeKeyService"
+            android:label="@string/home_key_name"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/home_key_service" />
+        </service>
+
+        <!-- The same clock, started by Home itself after home_idle_clock_minutes without input. -->
+        <activity
+            android:name=".UpdateActivity"
+            android:label="@string/menu_check_update"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="false" />
+        <!-- 快传（2026-10-23 K）：手机浏览器推 APK 到电视装 -->
+        <activity
+            android:name=".QuickTransferActivity"
+            android:label="快传"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:exported="false" />
+        <!-- 屏保 / 壁纸 / 内存清理：从桌面设置里拆出来的三个独立页（2026-10-23 K） -->
+        <activity
+            android:name=".ScreensaverSettingsActivity"
+            android:label="屏保"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".MemoryCleanSettingsActivity"
+            android:label="内存清理"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <!-- 清理白名单管理 -->
+        <activity
+            android:name=".WhitelistActivity"
+            android:label="清理白名单"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:exported="false" />
+        <activity
+            android:name=".ClockActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+
+        <!-- Screensaver: pick it in Settings, or `settings put secure screensaver_components
+             com.glasstv.tvhome/.ClockDream` over adb. -->
+        <service
+            android:name=".ClockDream"
+            android:label="@string/dream_name"
+            android:exported="true"
+            android:permission="android.permission.BIND_DREAM_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.dreams.DreamService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <!-- tools/theme.sh writes the theme through this where the shell can't reach Android/data;
+             see ThemeProvider. WRITE_SECURE_SETTINGS: the adb shell has it, ordinary apps don't. -->
+        <provider
+            android:name=".ThemeProvider"
+            android:authorities="${applicationId}.theme"
+            android:exported="true"
+            android:permission="android.permission.WRITE_SECURE_SETTINGS" />
+
+        <!-- 一键 OTA：把下载好的 APK 交给系统安装器。 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.updateapk"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/update_apk_paths" />
+        </provider>
+
+        <!-- The remote's Input button (KEYCODE_TV or KEYCODE_TV_INPUT) opens the input switcher, and input_key_keycodes and
+         app_keys (config.xml or a theme) bring back other remote buttons; see InputKeyService. -->
+        <service
+            android:name=".InputKeyService"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/input_key_service" />
+        </service>
+
+        <!-- 开机后确认前台：原生桌面占着就把 GlassTV 拉起来。 -->
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Settings menu, Sleep: the lock-screen action puts the TV to sleep; see SleepService. -->
+        <service
+            android:name=".SleepService"
+            android:exported="false"
+            android:label="@string/sleep_service_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/sleep_service" />
+        </service>
+    </application>
+</manifest>
