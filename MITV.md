@@ -44,6 +44,16 @@ adb install -r launcher/app/build/outputs/apk/release/app-release.apk
 升级时必须使用同一个 keystore（`launcher/keystore/cleanyourtv.keystore`，配置见
 `launcher/app/build.gradle`），否则应用库和首页排序会丢失。
 
+## 上游与升级策略（2026-10-25 定）
+
+- 代码基线：`jichun29/glasstv` v4.0.0（`439acdab`），对应上游 `Gathin23/cleanyourtv` 的 Round K（2026-10-21）。
+  4.0.0 之后 glasstv 只有官网/README 提交，桌面代码没有再变，所以这一层是最新的。
+- **不直接合并 cleanyourtv**：10-21 之后它已有 300+ 条 `launcher/` 提交（Round L..Y），但 glasstv 改过包名
+  （`com.gathin.tvhome` → `com.glasstv.tvhome`），上游补丁无法干净落地，且与本仓库 8 处定制冲突。
+- 升级路线：等 glasstv 自己跟上游，我们再跟 glasstv；确实需要某个上游功能时单独移植，不整体合并。
+- 已评估但暂不移植：`power_on_home`（开机回桌面兜底）、`clock_wallpaper` / `clock_glow`（屏保铺桌面壁纸）。
+  其余多为默认关闭的开关和主题（`single_row`、`glass_style`、`open_on_start_choice`），对本机收益低。
+
 ## 注意
 
 - 本机没有 root；`/data/user/0/com.ts.launcher/files/library_apps.txt` 无法直接读取。
